@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.schema';
 import { UserDto } from './user.dto';
@@ -24,6 +24,10 @@ export class UsersService {
     async createNewUser(userdto: UserDto) {
         const newUser =  new this.userModel(userdto);
         return newUser.save();
+    }
+
+    async deleteUser(username: string) {
+        this.userModel.deleteOne({ username });
     }
 
 }
