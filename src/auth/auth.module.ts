@@ -5,16 +5,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { LocalStrategy } from './strategies/local.strategy';
 import { UsersModule } from 'src/user/user.module';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
+import { jwtConfig } from 'src/config/jwt.config';
 
 @Module({
   imports: [
     UsersModule,
-    JwtModule.register({
-      secret: `${process.env.JWT_SECRET}`,
-      // set the expiration time of jwt token at 30 minutes
-      signOptions: { expiresIn: '30m' },
-    }),
-    UsersModule
+    JwtModule.registerAsync(jwtConfig),
+    PassportModule
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],

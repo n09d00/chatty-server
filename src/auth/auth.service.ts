@@ -27,7 +27,7 @@ export class AuthService {
         return this.userService.createNewUser(newUser);
     }
 
-    async validateUser(username: string, password: string): Promise<{ accessToken: string }> {
+    async validateUser(username: string, password: string): Promise<string> {
         const foundUsers = await this.userService.getUserWithUsername(username);
 
         // compare the passwords
@@ -40,14 +40,15 @@ export class AuthService {
 
         // choose the attribute as payload
         const payload = { username: foundUsers.username }
-        return {
-            // sign the payload and return the jwt token
-            accessToken: await this.jwtService.signAsync(payload)
-        }
+        // sign the payload and return the jwt token
+        const token = this.jwtService.sign(payload);
+        return token;
+            
+        
     }
 
     async deleteUserAccount(accessToken: string) {
-        const username = this.jwtService.decode(accessToken).username;
+        const username = this.jwtService.decode(accessToken);
         console.log(username)
         return
     }

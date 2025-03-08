@@ -1,11 +1,11 @@
-import { HttpCode, Controller, Post, Req, UseGuards, Body, HttpStatus, Res, Delete } from '@nestjs/common';
+import { HttpCode, Controller, Post, Req, UseGuards, Body, HttpStatus, Res, Delete, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
 import { Request } from 'express';
 import { UserDto } from 'src/user/user.dto';
 import { UserAlreadyExistsGuard } from './guards/userexists.guard';
 import { Response } from 'express';
-import { JwtAuthGuard } from './guards/jwt.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -22,16 +22,24 @@ export class AuthController {
     }
 
     @Post('/login')
-    @HttpCode(200)
     @UseGuards(LocalGuard)
     login(@Req() req: Request) {
         return req.user;
     }
 
-    @Delete('/delete-account')
+    @Get('/delete-account')
     @UseGuards(JwtAuthGuard)
     deleteAccount(@Req() req: Request) {
-        const { accessToken } = req.body;
-        this.authService.deleteUserAccount(accessToken);
+        console.log("Inside controller.");
+        /*const { accessToken } = req.body;
+        this.authService.deleteUserAccount(accessToken);*/
+    }
+
+    @Get('/status')
+    @UseGuards(JwtAuthGuard)
+    status(@Req() req: Request) {
+        console.log('Inside AuthController status method');
+        console.log(req.user);
+        return req.user;
     }
 }
