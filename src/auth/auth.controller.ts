@@ -1,4 +1,4 @@
-import { HttpCode, Controller, Post, Req, UseGuards, Body, HttpStatus, Res, Delete, Get } from '@nestjs/common';
+import { HttpCode, Controller, Post, Req, UseGuards, Body, HttpStatus, Res, Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guards/local.guard';
 import { Request } from 'express';
@@ -22,24 +22,11 @@ export class AuthController {
     }
 
     @Post('/login')
+    @HttpCode(HttpStatus.OK)
     @UseGuards(LocalGuard)
     login(@Req() req: Request) {
         return req.user;
     }
 
-    @Get('/delete-account')
-    @UseGuards(JwtAuthGuard)
-    deleteAccount(@Req() req: Request) {
-        console.log("Inside controller.");
-        /*const { accessToken } = req.body;
-        this.authService.deleteUserAccount(accessToken);*/
-    }
-
-    @Get('/status')
-    @UseGuards(JwtAuthGuard)
-    status(@Req() req: Request) {
-        console.log('Inside AuthController status method');
-        console.log(req.user);
-        return req.user;
-    }
+    
 }

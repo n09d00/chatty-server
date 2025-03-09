@@ -1,24 +1,17 @@
-import { Controller, Get, Delete, UseGuards } from "@nestjs/common";
+import { Controller, Get, Delete, UseGuards, Req } from "@nestjs/common";
 import { UsersService } from "./user.service";
 import { JwtAuthGuard } from "src/auth/guards/jwt-auth.guard";
-
+import { Request } from "express";
+import { User } from "./user.schema";
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
+    @Delete('/delete-account')
     @UseGuards(JwtAuthGuard)
-    @Get('/get-all')
-    async getAllUser() {
-        return this.usersService.getAllUser();
-    }
-
-    /*@Get("/:username")
-    async getUserByUsername(username: string) {
-        return this.usersService.getUserWithUsername(username);
-    }*/
-    @Delete('/delete-user/:username')
-    async deleteUserByUsername(username: string) {
-        this.usersService.deleteUser(username);
+    deleteAccount(@Req() req: Request) {
+        const user = req.user as User;
+        this.usersService.deleteUser(user.username)
     }
 }

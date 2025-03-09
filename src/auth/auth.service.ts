@@ -46,10 +46,4 @@ export class AuthService {
             
         
     }
-
-    async deleteUserAccount(accessToken: string) {
-        const username = this.jwtService.decode(accessToken);
-        console.log(username)
-        return
-    }
 }

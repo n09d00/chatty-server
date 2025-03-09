@@ -8,10 +8,6 @@ import { UserDto } from './user.dto';
 export class UsersService {
     constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-    async getAllUser(): Promise<User[]> {
-        return this.userModel.find().exec();
-    }
-
     async getUserWithUsername(username: string ): Promise<User> {
         const foundUser = await this.userModel.findOne({ username }).exec();
 

@@ -8,7 +8,6 @@ export class UserAlreadyExistsGuard implements CanActivate {
     constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
-        console.log("Check if user exists.");
         const user = context.switchToHttp().getRequest().body;
         // check if user with username already exists
         const foundUser = await this.userModel.findOne({ username: user.username });
