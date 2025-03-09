@@ -10,49 +10,30 @@ It is possible to build on top of this API for your own use cases.
 
 ## Get Started
 
-To use this API some parameters have to be provided:
-- Database Connectivity in src/app.module.ts:
-  ```
-  @Module({
-  imports: [
-    MongooseModule.forRoot('mongodb://localhost/nest'), # add your database connection here
-    AuthModule],
-  controllers: [],
-  providers: [],
-  })
-  export class AppModule {}
-  ```
+Clone this repository.
+```
+git clone https://github.com/n09d00/authentication-api.git
+```
 
-- Inserting JWT Secret (using enviorenment variables) in src/auth/auth.module.ts:
-  ```
-  @Module({
-  imports: [
-    JwtModule.register({
-      secret: "Set the JWT SECRET here!", # Insert here
-      // set the expiration time of jwt token at 30 minutes
-      signOptions: { expiresIn: '30m'},
-    }),
-  ],
-  providers: [AuthService],
-  controllers: [AuthController, LocalStrategy, JwtStrategy],
-  })
-  ```
-  
-  and in src/auth/strategies/jwt.strategy.ts:
-  ```
-  @Injectable()
-  export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor() {
-      super({
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        ignoreExpiration: false,
-        secretOrKey: 'Set SECRET KEY HERE!',
-      });
-    }
-  
-    validate(payload: any) {
-      return payload;
-    }
-  }
-  ```
+Change to the root directory of this project.
+```
+cd authentication-api
+```
+
+Add a .env file to the root directory with your MongoDB URI and JWT Secret.
+```
+MONGO_DB_URI="Your Mongo DB URI"
+JWT_SECRET="Your JWT Secret"
+```
+
+Install the required packages specified in package.json:
+```
+npm install
+```
+
+Start the server:
+```
+npm run start
+```
+
 
