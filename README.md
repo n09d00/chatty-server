@@ -1,23 +1,21 @@
-# Base Authentication API implemented in NestJS with MongoDB
+# A Chat Server API implemented in NestJS with MongoDB
 
 ## Description
 
-This API provides basic functionality for User Authentication with JWT.
-It uses MongoDB as the database for storing user data.
-
-It is possible to build on top of this API for your own use cases.
+This API can be used to request user and message data from a database (MongoDB is used in this example)
+and handle real-time messaging
 
 
 ## Get Started
 
 Clone this repository.
 ```
-git clone https://github.com/n09d00/authentication-api.git
+git clone https://github.com/n09d00/chatty-server.git
 ```
 
 Change to the root directory of this project.
 ```
-cd authentication-api
+cd chatty-server
 ```
 
 Add a .env file to the root directory with your MongoDB URI and JWT Secret.
