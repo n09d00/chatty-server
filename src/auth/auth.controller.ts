@@ -13,8 +13,8 @@ export class AuthController {
 
     @Post('/register')
     @UseGuards(UserAlreadyExistsGuard)
-    register(@Body() userDto: UserDto, @Res() res: Response) {
-        const user = this.authService.signUpNewUser(userDto.email, userDto.username, userDto.password);
+    async register(@Body() userDto: UserDto, @Res() res: Response) {
+        const user = await this.authService.signUpNewUser(userDto.email, userDto.username, userDto.password);
         return res.status(HttpStatus.CREATED).json({
             message: "Registration was successful.",
             user
@@ -25,8 +25,13 @@ export class AuthController {
     @HttpCode(HttpStatus.OK)
     @UseGuards(LocalGuard)
     login(@Req() req: Request) {
+        console.log(req.user);
         return req.user;
     }
 
-    
+    @Post('logout')
+    @UseGuards(JwtAuthGuard)
+    async logout(@Req() req: Request) {
+        return req.logOut;
+    }
 }

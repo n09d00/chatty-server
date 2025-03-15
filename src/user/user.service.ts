@@ -8,7 +8,7 @@ import { UserDto } from './user.dto';
 export class UsersService {
     constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
-    async getUserWithUsername(username: string ): Promise<User> {
+    async getUserWithUsername(username: string ): Promise<any> {
         const foundUser = await this.userModel.findOne({ username }).exec();
 
         if (!foundUser) {
@@ -17,13 +17,27 @@ export class UsersService {
         return foundUser
     }
 
-    async createNewUser(userdto: UserDto) {
+    async createNewUser(userdto: UserDto): Promise<User> {
         const newUser =  new this.userModel(userdto);
         return newUser.save();
     }
 
     async deleteUser(username: string) {
         this.userModel.deleteOne({ username });
+    }
+
+    async addFriend(username: string, friendUsername: string) {
+        const updatedUser = await this.userModel.findOneAndUpdate(
+            { username }, 
+            { $push: { friendsList: friendUsername }},
+            { new: true }
+        );
+        return updatedUser
+    }
+
+    async getAllUsers(currentLoggedInUsername: string): Promise<User[]> {
+        const users = await this.userModel.find({ username: { $ne: currentLoggedInUsername }}).select("-password");
+        return users;
     }
 
 }
