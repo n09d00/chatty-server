@@ -7,6 +7,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 
 @Controller('users')
+@UseGuards(JwtAuthGuard)
 export class UsersController {
     constructor(
         private readonly usersService: UsersService,
@@ -14,24 +15,22 @@ export class UsersController {
     ) {}
 
     @Delete('/delete-account')
-    @UseGuards(JwtAuthGuard)
     async deleteAccount(@Req() req: Request) {
         const {username, id} = req.user as UserPayload;
+        console.log(id);
         const userS = await this.usersService.getUserWithUsername(username);
-        const u = await this.userModel.findById(userS._id).exec();
+        const u = await this.userModel.findById({_id: id}).exec();
         console.log(u);
         //this.usersService.deleteUser(user.username)
     }
 
     @Get('/get-all')
-    @UseGuards(JwtAuthGuard)
     async getAllUsers(@Req() req: Request): Promise<User[]> {
         const user = req.user as User;
         return this.usersService.getAllUsers(user.username);
     }
 
     @Post('/add-friend/:username')
-    @UseGuards(JwtAuthGuard)
     async addFriendToCurrentUser(@Req() req: Request, @Param('username') friendUsername: string) {
         const currentUser = req.user as User
         this.usersService.addFriend(currentUser.username, friendUsername);

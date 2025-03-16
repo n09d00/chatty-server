@@ -13,6 +13,21 @@ export class MessageService {
         return newMessage.save();
     }
 
+    async getAllMessages(): Promise<Message[]> {
+        const allMessages = await this.messageModel.find().exec();
+        return allMessages
+    }
+
+    async getAllRelevantMessages(id: string, otherUserId: string): Promise<Message[]> {
+        const relevantMessages = await this.messageModel.find({
+            $or: [
+                { messageFrom: id, messageTo: otherUserId},
+                { messageFrom: otherUserId, messageTo: id}
+            ]
+        });
+        return relevantMessages;
+    }
+
     async updateMessage(id: mongoose.Schema.Types.ObjectId, newMessage: string) {
         // TODO: Find a way to update a message
         const message = this.messageModel.findOneAndUpdate({ _id: id }, { messageContent: newMessage });

@@ -6,10 +6,10 @@ export type MessageDocument = HydratedDocument<Message>
 @Schema({ timestamps: true })
 export class Message {
     @Prop({ required: true, ref: "User" })
-    messageFrom: mongoose.Schema.Types.ObjectId;
+    messageFrom: mongoose.Types.ObjectId;
 
     @Prop({ required: true, ref: "User" })
-    messageTo: mongoose.Schema.Types.ObjectId;
+    messageTo: mongoose.Types.ObjectId;
 
     @Prop({ required: true })
     messageContent: string;
