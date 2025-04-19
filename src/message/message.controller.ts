@@ -1,4 +1,4 @@
-import { Controller, Post, UseGuards, Req, Param, Get, Res } from '@nestjs/common';
+import { Controller, Post, UseGuards, Req, Param, Get, Res, Put } from '@nestjs/common';
 import { Request, Response } from "express";
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { MessageService } from './message.service';
@@ -32,11 +32,18 @@ export class MessageController {
     }
 
     @Get('getMessages/:otherUserId')
-    async getMessages(@Req() req: Request, @Param('otherUserId') otherUserId: string, @Res() res: Response) {
+    async getMessages(@Req() req: Request, @Param('otherUserId') otherUserId: string) {
         const user = req.user as UserPayload;
 
+        // send user id and receiver id to service
         const messages = await this.messageService.getAllRelevantMessages(user.id, otherUserId);
-        res.status(200).json(messages)
+        return messages
+    }
+
+    @Put('updateMessage/:messageId')
+    async updateMessage(@Param('messageId') messageId: string, newMessage: string) {
+        const updatedMessage = await this.messageService.updateMessage(messageId, newMessage);
+        return updatedMessage;
     }
 
     // This function is only for testing. Do not keep it in production!
