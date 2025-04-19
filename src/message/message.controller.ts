@@ -1,9 +1,10 @@
-import { Controller, Post, UseGuards, Req, Param, Get, Res, Put } from '@nestjs/common';
-import { Request, Response } from "express";
+import { Controller, Post, UseGuards, Req, Param, Get, Res, Put, Body } from '@nestjs/common';
+import { Request } from "express";
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { MessageService } from './message.service';
-import mongoose, { Mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 import { SocketGateWay } from 'src/socket/socket-gateway';
+import { MessageDto } from './message.dto';
 
 @Controller('message')
 @UseGuards(JwtAuthGuard)
@@ -41,8 +42,9 @@ export class MessageController {
     }
 
     @Put('updateMessage/:messageId')
-    async updateMessage(@Param('messageId') messageId: string, newMessage: string) {
-        const updatedMessage = await this.messageService.updateMessage(messageId, newMessage);
+    async updateMessage(@Param('messageId') messageId: string, @Body() newMessage: MessageDto) {
+        console.log(newMessage);
+        const updatedMessage = await this.messageService.updateMessage(messageId, newMessage.messageContent);
         return updatedMessage;
     }
 

@@ -34,7 +34,12 @@ export class MessageService {
     }
 
     async updateMessage(id: string, newMessage: string) {
-        const updatedMessage = await this.messageModel.findOneAndUpdate({ _id: id }, { messageContent: newMessage }).exec();
+        console.log(newMessage);
+        const messageId = new mongoose.Types.ObjectId(id);
+        const updatedMessage = await this.messageModel.findOneAndUpdate(
+            { _id: messageId }, 
+            { $set: { messageContent: newMessage }}, 
+            {new: true}).exec();
         return updatedMessage;
     }
 
